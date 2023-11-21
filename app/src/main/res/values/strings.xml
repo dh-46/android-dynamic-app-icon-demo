@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">dynamic-app-icon</string>
+
+    <string name="activate">啟用功能</string>
+    <string name="deactivate">停用功能</string>
 </resources>
