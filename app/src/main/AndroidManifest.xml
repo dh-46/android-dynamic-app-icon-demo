@@ -20,9 +20,9 @@
             </intent-filter>
         </activity>
 
-        <!--  安裝當下的 Default  -->
+        <!--  安裝當下的  -->
         <activity-alias
-            android:name=".MainActivityDefault"
+            android:name=".MainActivityBuiltIn"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
@@ -36,7 +36,7 @@
 
         <!--  啟用後的 Default -->
         <activity-alias
-            android:name=".MainActivityActivatedDefault"
+            android:name=".MainActivityDefault"
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"

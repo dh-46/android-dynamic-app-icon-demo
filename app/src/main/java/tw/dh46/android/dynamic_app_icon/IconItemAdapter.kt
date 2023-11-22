@@ -10,8 +10,9 @@ import tw.dh46.android.dynamic_app_icon.databinding.ItemIconBinding
 /**
  *  Created by DanielHuang on 2023/11/21
  */
-class IconItemAdapter(val dataList: List<AppIcons>,
-                      val onClicked: (icon: AppIcons, index: Int) -> Unit) :
+class IconItemAdapter(
+    private val dataList: List<AppIcon>,
+    val onClicked: (icon: AppIcon, index: Int) -> Unit) :
     RecyclerView.Adapter<IconItemAdapter.ViewHolder>() {
 
 
@@ -22,10 +23,10 @@ class IconItemAdapter(val dataList: List<AppIcons>,
             binding.root.setOnClickListener(listener)
         }
 
-        fun bindData(icons: AppIcons) {
+        fun bindData(icons: AppIcon) {
             binding.ivIcon.setImageResource(icons.iconResId)
             binding.tvName.text = icons.alias
-            binding.viewIndicator.isVisible = icons.isSelected
+            binding.viewIndicator.isVisible = icons.isActive
         }
     }
 
