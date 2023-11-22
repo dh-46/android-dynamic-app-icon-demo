@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">dynamic-app-icon</string>
+    <string name="app_name">動態 App Icon</string>
 
     <string name="activate">啟用功能</string>
     <string name="deactivate">停用功能</string>
+    <string name="error_feature_not_activated">請先啟用功能，再選擇自訂圖示。</string>
 </resources>
