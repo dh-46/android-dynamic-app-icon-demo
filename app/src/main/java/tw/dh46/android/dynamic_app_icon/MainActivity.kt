@@ -18,10 +18,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        appIconManager = AppIconManager(
-            this,
-            packageManager
-        )
+        appIconManager = AppIconManager(this)
 
         initRvIcons()
         initBtnFeature()

@@ -26,7 +26,7 @@ class IconItemAdapter(
         fun bindData(icons: AppIcon) {
             binding.ivIcon.setImageResource(icons.iconResId)
             binding.tvName.text = icons.alias
-            binding.viewIndicator.isVisible = icons.isActive
+            binding.viewIndicator.isVisible = icons.isEnable
         }
     }
 

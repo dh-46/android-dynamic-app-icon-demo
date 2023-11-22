@@ -8,12 +8,12 @@ import android.content.pm.PackageManager
 /**
  *  Created by DanielHuang on 2023/11/21
  */
-enum class AppIcon(val alias: String, val iconResId: Int, var isActive: Boolean) {
-    BuiltIn("MainActivityBuiltIn", R.mipmap.ic_launcher, true),
-    Default("MainActivityDefault", R.mipmap.ic_launcher, false),
-    Blue("MainActivityBlue", R.mipmap.ic_launcher_blue, false),
-    Red("MainActivityRed", R.mipmap.ic_launcher_red, false),
-    Yellow("MainActivityYellow", R.mipmap.ic_launcher_yellow, false)
+sealed class AppIcon(val alias: String, val iconResId: Int, var isEnable: Boolean) {
+    data object BuiltIn : AppIcon("MainActivityBuiltIn", R.mipmap.ic_launcher, true)
+    data object Default : AppIcon("MainActivityDefault", R.mipmap.ic_launcher, false)
+    data object Blue : AppIcon("MainActivityBlue", R.mipmap.ic_launcher_blue, false)
+    data object Red : AppIcon("MainActivityRed", R.mipmap.ic_launcher_red, false)
+    data object Yellow : AppIcon("MainActivityYellow", R.mipmap.ic_launcher_yellow, false)
 }
 
 private val appIconOptions = listOf(AppIcon.Default, AppIcon.Blue, AppIcon.Red, AppIcon.Yellow)
@@ -30,7 +30,7 @@ private val appIconOptions = listOf(AppIcon.Default, AppIcon.Blue, AppIcon.Red, 
  */
 class AppIconManager(
     private val context: Context,
-    private val packageManager: PackageManager,
+    private val packageManager: PackageManager = context.packageManager,
     private val buildInAppIcon: AppIcon = AppIcon.BuiltIn,
     private val defaultAppIcon: AppIcon = AppIcon.Default,
     private val targetActivity: String = "MainActivity"
@@ -56,21 +56,41 @@ class AppIconManager(
      * @param appIcon
      */
     fun setActiveAppIcon(appIcon: AppIcon) {
-        // 啟用後才能變換 Icon
-        if (!isFeatureActivated()) throw IllegalStateException("Feature is not activated!")
-
-        appIcon.isActive = true
+        // 功能啟用後才能變換 Icon
+        checkFeatureActivated()
 
         // 停用其他選項
+        disableOtherIconOptions(appIcon)
+
+        // 啟用選中的選項
+        enableIcon(appIcon)
+    }
+
+    private fun enableIcon(appIcon: AppIcon) {
+        appIcon.isEnable = true
+        setAliasComponentState(appIcon.alias, true)
+    }
+
+    /**
+     * 停用其他選項
+     *
+     * @param appIcon
+     */
+    private fun disableOtherIconOptions(appIcon: AppIcon) {
         getLatestIconOptions().filterNot {
             it == appIcon
         }.forEach {
-            it.isActive = false
+            it.isEnable = false
             setAliasComponentState(it.alias, false)
         }
+    }
 
-        // 啟用選中的選項
-        setAliasComponentState(appIcon.alias, true)
+    /**
+     * 檢查是否啟用
+     *
+     */
+    private fun checkFeatureActivated() {
+        if (!isFeatureActivated()) throw IllegalStateException("Feature is not activated!")
     }
 
     /**
@@ -97,7 +117,7 @@ class AppIconManager(
             if (isEnabled) {
                 appIconOptions.forEach {
                     if (activityInfo.name == "${context.packageName}.${it.alias}") {
-                        it.isActive = true
+                        it.isEnable = true
                     }
                 }
             }
@@ -109,6 +129,9 @@ class AppIconManager(
     // ----------------------------------------------------
 
     private fun setAliasComponentState(alias: String, enable: Boolean) {
+        // 檢查是否有非法 alias
+        require(buildInAppIcon.alias == alias || appIconOptions.any { it.alias == alias }) { "Invalid alias: $alias" }
+
         val newState = if (enable) {
             PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         } else {
