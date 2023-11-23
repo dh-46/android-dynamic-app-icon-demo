@@ -8,3 +8,4 @@ This is a demo project for changing app's icon dynamically.
 
 ## Screenshots 畫面截圖
 
+<img src="https://github.com/dh-46/android-dynamic-app-icon-demo/blob/main/SCREEN_SHOTS/Screenshot_20231123_170857.png" width="50%"><img src="https://github.com/dh-46/android-dynamic-app-icon-demo/blob/main/SCREEN_SHOTS/android-dynamic-app-icon.gif" width="49.5%">
